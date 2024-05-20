@@ -1,20 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import RightArrow from "@mui/icons-material/ArrowForward";
 import Link from "next/link";
 
-export default function SearchBar() {
-  const [search, setSearch] = useState("");
+export default function SearchBar({ icon, expand }) {
+  const [value, setValue] = useState("");
+
+  const textAreaRef = useRef(null);
+  useEffect(() => {
+    if (textAreaRef && expand) {
+      textAreaRef.current.style.height = "0px";
+      const scrollHeight = textAreaRef.current.scrollHeight;
+      textAreaRef.current.style.height = scrollHeight + "px";
+    }
+  }, [textAreaRef, value]);
 
   return (
-    <div className="w-[80%] max-w-[600px] flex flex-col relative justify-center items-center">
-      <SearchIcon color="disabled" className="absolute left-4" />
-      <input
+    <div className="w-[80%] max-w-[700px] flex flex-col relative justify-center items-center">
+      {icon && <SearchIcon color="disabled" className="absolute left-4" />}
+
+      <textarea
         type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="ask ubc engine..."
-        className="w-full border border-[var(--secondary-text)] pr-4 py-3 pl-12 rounded-full shadow-md shadow-orange-200"
+        ref={textAreaRef}
+        rows={1}
+        className={"search-bar w-full border border-[var(--secondary-text)] pr-12 py-3 rounded-[24px] shadow-md shadow-orange-200 ".concat(
+          icon ? "pl-12" : "pl-4"
+        )}
       />
       <Link
         className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2"
