@@ -7,7 +7,7 @@
 
 
 :root {
-  --background-color: #faead4;
+  --primary-bg: #faead4;
   --secondary-bg: #f5e5c9;
   --primary-text: #5c4033;
   --secondary-text: #d6a360;
@@ -23,7 +23,8 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
-  background-color: var(--background-color);
+  background-color: var(--primary-bg);
+  font-weight: 400;
 }
 
 .name {

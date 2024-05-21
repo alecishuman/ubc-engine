@@ -49,7 +49,7 @@ export default function Home() {
         <div className="font-semibold mr-[4px] text-[var(--primary-text)] tracking-[2px]">
           ubc
         </div>
-        <div className="text-[var(--secondary-text)] tracking-[0.5px]">
+        <div className="text-[var(--secondary-text)] tracking-[1px]">
           {curEngine}
           <span className="flashing-cursor text-[var(--secondary-text)]">
             |
