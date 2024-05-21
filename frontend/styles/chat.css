@@ -1,12 +1,8 @@
-textarea {
-    resize: none;
-}
-
-textarea::-webkit-scrollbar {
+.messages::-webkit-scrollbar {
     display: none;
 }
 
-textarea {
+.messages {
     overflow-y: scroll;
     /* Add the ability to scroll */
     -ms-overflow-style: none;

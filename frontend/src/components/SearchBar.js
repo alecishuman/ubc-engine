@@ -17,7 +17,7 @@ export default function SearchBar({ icon, expand }) {
 
   return (
     <div className="w-[80%] max-w-[700px] flex flex-col relative justify-center items-center">
-      {icon && <SearchIcon color="disabled" className="absolute left-4" />}
+      <SearchIcon color="disabled" className="absolute left-4" />
 
       <textarea
         type="text"
@@ -26,9 +26,7 @@ export default function SearchBar({ icon, expand }) {
         placeholder="ask ubc engine..."
         ref={textAreaRef}
         rows={1}
-        className={"search-bar w-full border border-[var(--secondary-text)] pr-12 py-3 rounded-[24px] shadow-md shadow-orange-200 ".concat(
-          icon ? "pl-12" : "pl-4"
-        )}
+        className="search-bar w-full max-h-[50vh] border border-[var(--secondary-text)] px-12 py-3 rounded-[24px] shadow-md shadow-orange-200"
       />
       <Link
         className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2"

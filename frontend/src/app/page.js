@@ -43,13 +43,13 @@ export default function Home() {
   }, [curEngineIndex, engine, direction]);
 
   return (
-    <div className="w-full h-[100vh] flex flex-col gap-1 justify-center items-center">
-      <div className="text-lg">welcome to,</div>
-      <div className="name flex items-center text-5xl mb-8 ">
-        <div className="font-semibold mr-[4px] text-[var(--primary-text)] tracking-[2px]">
+    <div className="w-full h-[100vh] flex flex-col gap-2 justify-center items-center">
+      <div className="text-lg mb-1">welcome to,</div>
+      <div className="name flex items-center text-5xl mb-8">
+        <div className="font-semibold mr-[4px] text-[var(--primary-text)] tracking-[1.5px]">
           ubc
         </div>
-        <div className="text-[var(--secondary-text)] tracking-[1px]">
+        <div className="text-[var(--secondary-text)] tracking-[0.5px]">
           {curEngine}
           <span className="flashing-cursor text-[var(--secondary-text)]">
             |
