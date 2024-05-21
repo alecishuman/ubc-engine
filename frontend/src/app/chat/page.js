@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 import SearchBar from "@/components/SearchBar";
 
@@ -30,7 +31,7 @@ export default function ChatPage() {
     "I am looking for information on React. Could you help me with that?",
     "Hi! How can I help you today? i! How can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
     "I am looking for information on React. Could you help me with that?",
-    "Hi! How can I help you today? i! How can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
+    "Hi! How can I help you today? i! \nHow can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
   ]);
 
   // Response
@@ -49,20 +50,17 @@ export default function ChatPage() {
   return (
     <div className="w-full h-[100vh] flex flex-row">
       <div className="flex flex-col w-full md:w-[70%] justify-center items-center">
-        <HomeIcon
-          className="fixed top-[3vh]"
-          sx={{ color: "var(--primary-text)", fontSize: 32 }}
-        />
+        <Link className="fixed top-[3vh]" href="/">
+          <HomeIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
+        </Link>
 
-        <div className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 py-2">
+        <div className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 py-4">
           {messages.map((message, index) =>
             index % 2 == 0 ? (
               <div className="flex flex-col gap-2">
                 <div className="font-semibold">Engine:</div>
                 <div className="bg-[var(--primary-bg)] rounded-lg">
-                  Hi! How can I help you today? i! How can I help you today? i!
-                  How can I help you today? i! How can I help you today? i! How
-                  can I help you today? i! How can I help you today?
+                  {message}
                 </div>
               </div>
             ) : (
