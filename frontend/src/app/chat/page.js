@@ -8,9 +8,13 @@ import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
 
 export default function ChatPage() {
-  // Search bar
   const [value, setValue] = useState("");
+  const [links, setLinks] = useState([]);
 
+  const [questions, setQuestions] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  // Search bar
   const textAreaRef = useRef(null);
   useEffect(() => {
     if (textAreaRef) {
@@ -20,32 +24,31 @@ export default function ChatPage() {
     }
   }, [textAreaRef, value]);
 
-  // Chat messages
+  const search = (message) => {
+    setMessages((prev) => [...prev, message]);
+    fetch("http://localhost:8080/engine/1")
+      .then((response) => response.json())
+      .then((data) => {
+        setLinks(data.links);
+        setQuestions(data.questions);
+        setMessages((prev) => [...prev, data.message]);
+        setValue("");
+      })
+      .catch((error) => {
+        setMessages((prev) => [...prev, "An error occurred."]);
+        console.error("Error:", error);
+      });
+  };
 
-  const [messages, setMessages] = useState([
-    "Hi! How can I help you today?",
-    "I am looking for information on React.",
-    "Hi! How can I help you today? i! How can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
-    "I am looking for information on React. Could you help me with that?",
-    "Hi! How can I help you today? i! How can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
-    "I am looking for information on React. Could you help me with that?",
-    "Hi! How can I help you today? i! How can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
-    "I am looking for information on React. Could you help me with that?",
-    "Hi! How can I help you today? i! \nHow can I help you today? iHow can I help you today? i! How can I help you today? i! Howcan I help you today? i! How can I help you today?",
-  ]);
-
-  // Response
-  const [links, setLinks] = useState([
-    { name: "Google", url: "https://www.google.com" },
-    { name: "Wikipedia", url: "https://www.wikipedia.com" },
-    { name: "Material UI", url: "https://mui.com/material-ui/icons/" },
-  ]);
-
-  const [relatedQuestions, setRelatedQuestions] = useState([
-    "This is a random question I want to ask",
-    "What is another question that I could ask you?",
-    "This is the third question.",
-  ]);
+  // Messages
+  const messageBottomRef = useRef(null);
+  useEffect(() => {
+    if (messageBottomRef) {
+      messageBottomRef.current.lastElementChild?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   return (
     <div className="w-full h-[100vh] flex flex-row">
@@ -54,18 +57,25 @@ export default function ChatPage() {
           <HomeIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
         </Link>
 
-        <div className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 py-4">
+        <div
+          ref={messageBottomRef}
+          className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 pt-4 pb-6"
+        >
           {messages.map((message, index) =>
-            index % 2 == 0 ? (
+            index % 2 == 1 ? (
               <div className="flex flex-col gap-2">
-                <div className="font-semibold">Engine:</div>
+                <div className="font-semibold text-[var(--primary-text)]">
+                  Engine:
+                </div>
                 <div className="bg-[var(--primary-bg)] rounded-lg">
                   {message}
                 </div>
               </div>
             ) : (
               <div key={index} className="flex flex-col gap-2 items-end">
-                <div className="font-semibold">You</div>
+                <div className="font-semibold text-[var(--primary-text)]">
+                  You
+                </div>
                 <div className="bg-[var(--secondary-text)] rounded-lg p-4 max-w-[70%]">
                   {message}
                 </div>
@@ -88,7 +98,7 @@ export default function ChatPage() {
             />
             <button
               className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2"
-              href="/chat"
+              onClick={() => search(value)}
             >
               <RightArrow />
             </button>
@@ -96,7 +106,9 @@ export default function ChatPage() {
         </div>
       </div>
       <div className="w-[30%] h-full fixed right-0 flex flex-col gap-4 px-8 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] max-md:hidden">
-        <div className="text-2xl font-semibold">Related Links</div>
+        {links.length > 0 && (
+          <div className="text-2xl font-semibold">Related Links</div>
+        )}
         <div className="flex flex-col gap-2 w-full">
           {links.map((link, index) => (
             <div className="w-full">
@@ -114,9 +126,11 @@ export default function ChatPage() {
             </div>
           ))}
         </div>
-        <div className="text-2xl font-semibold mt-4">Related Searches</div>
+        {questions.length > 0 && (
+          <div className="text-2xl font-semibold mt-4">Related Searches</div>
+        )}
         <div className="flex flex-col gap-4 w-full">
-          {relatedQuestions.map((question, index) => (
+          {questions.map((question, index) => (
             <div className="w-full border border-[var(--primary-text)] bg-[var(--primary-bg)] px-3 py-4 rounded-lg">
               {index + 1}. {question}
             </div>
