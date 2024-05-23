@@ -131,9 +131,12 @@ export default function ChatPage() {
         )}
         <div className="flex flex-col gap-4 w-full">
           {questions.map((question, index) => (
-            <div className="w-full border border-[var(--primary-text)] bg-[var(--primary-bg)] px-3 py-4 rounded-lg">
+            <button
+              className="w-full border border-[var(--primary-text)] bg-[var(--primary-bg)] px-3 py-4 rounded-lg text-start"
+              onClick={() => search(question)}
+            >
               {index + 1}. {question}
-            </div>
+            </button>
           ))}
         </div>
       </div>
