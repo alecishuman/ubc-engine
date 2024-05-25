@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className="w-full h-[100vh] flex flex-col gap-2 justify-center items-center">
       <div className="text-lg mb-1">welcome to,</div>
-      <div className="name flex items-center text-5xl mb-8">
+      <div className="secondary-font flex items-center text-5xl mb-8">
         <div className="font-semibold mr-[4px] text-[var(--primary-text)] tracking-[1.5px]">
           ubc
         </div>
