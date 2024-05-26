@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import SearchIcon from "@mui/icons-material/Search";
 import RightArrow from "@mui/icons-material/ArrowForward";
 
 export default function SearchBar() {
+  const router = useRouter();
   const [value, setValue] = useState("");
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      router.push(`/chat?search=${value}`);
     }
   };
 

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import SearchBar from "@/components/SearchBar";
 
@@ -8,8 +9,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
 
 export default function ChatPage() {
+  const searchParams = useSearchParams();
   const [value, setValue] = useState("");
-
   const [messages, setMessages] = useState([]);
   const [links, setLinks] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -66,6 +67,16 @@ export default function ChatPage() {
       });
     }
   }, [messages]);
+
+  // Initial search
+  const didSearch = useRef(false);
+  useEffect(() => {
+    if (didSearch.current) return;
+    if (searchParams.has("search") && searchParams.get("search").length > 0) {
+      search(searchParams.get("search"));
+      didSearch.current = true;
+    }
+  }, []);
 
   return (
     <div className="w-full h-[100vh] flex flex-row">
