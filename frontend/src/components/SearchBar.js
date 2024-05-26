@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import RightArrow from "@mui/icons-material/ArrowForward";
 import Link from "next/link";
 
-export default function SearchBar({ icon, expand }) {
+import SearchIcon from "@mui/icons-material/Search";
+import RightArrow from "@mui/icons-material/ArrowForward";
+
+export default function SearchBar() {
   const [value, setValue] = useState("");
 
-  const textAreaRef = useRef(null);
-  useEffect(() => {
-    if (textAreaRef && expand) {
-      textAreaRef.current.style.height = "0px";
-      const scrollHeight = textAreaRef.current.scrollHeight;
-      textAreaRef.current.style.height = scrollHeight + "px";
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
     }
-  }, [textAreaRef, value]);
+  };
 
   return (
     <div className="w-[80%] max-w-[700px] flex flex-col relative justify-center items-center">
@@ -24,8 +22,8 @@ export default function SearchBar({ icon, expand }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="ask ubc engine..."
-        ref={textAreaRef}
         rows={1}
+        onKeyDown={handleKeyDown}
         className="search-bar w-full max-h-[50vh] border border-[var(--secondary-text)] px-12 py-3 rounded-[24px] shadow-md shadow-orange-200"
       />
       <Link

@@ -56,7 +56,7 @@ export default function Home() {
           </span>
         </div>
       </div>
-      <SearchBar icon={true} expand={false} />
+      <SearchBar />
       <div className="mt-10 text-sm mb-1">
         have an account already? or{" "}
         <Link href="/signup" className="underline">
