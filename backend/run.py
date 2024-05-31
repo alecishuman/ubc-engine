@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from flask_cors import CORS
 from flask_pymongo import PyMongo
 
@@ -12,9 +12,9 @@ CORS(app)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["MONGO_URI"] = os.getenv("DB_URI")
 
+
 mongo = PyMongo(app)
 db = mongo.db
-
 
 @app.route("/engine/<int:id>", methods=["GET"])
 def get_engine_response(id):

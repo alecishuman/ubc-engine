@@ -12,6 +12,8 @@ export default function ChatPage() {
   const searchParams = useSearchParams();
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [currentResponse, setCurrentResponse] = useState("");
+  const [responseTyping, setResponseTyping] = useState(false);
   const [links, setLinks] = useState([]);
   const [questions, setQuestions] = useState([]);
 
@@ -49,13 +51,30 @@ export default function ChatPage() {
       .then((data) => {
         setLinks(data.links);
         setQuestions(data.questions);
-        setMessages((prev) => [...prev, data.message]);
         setValue("");
+        typingResponse(data.message);
       })
       .catch((error) => {
         setMessages((prev) => [...prev, "An error occurred."]);
         console.error("Error:", error);
       });
+  };
+
+  const typingResponse = (res) => {
+    const typingSpeed = 30;
+    let i = 0;
+    setResponseTyping(true);
+    setCurrentResponse("");
+    const typingInterval = setInterval(() => {
+      setCurrentResponse(res.slice(0, i));
+      i += 3;
+      if (i >= res.length) {
+        setMessages((prev) => [...prev, res]);
+        setCurrentResponse("");
+        clearInterval(typingInterval);
+        setResponseTyping(false);
+      }
+    }, typingSpeed);
   };
 
   // Messages
@@ -110,6 +129,16 @@ export default function ChatPage() {
               </div>
             )
           )}
+          {currentResponse && (
+            <div className="flex flex-col gap-2">
+              <div className="font-semibold text-[var(--primary-text)]">
+                Engine:
+              </div>
+              <div className="bg-[var(--primary-bg)] rounded-lg">
+                {currentResponse}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="fixed w-[inherit] flex justify-center bottom-[4vh] z-10">
@@ -125,6 +154,7 @@ export default function ChatPage() {
               className={
                 "search-bar w-full max-h-[50vh] border border-[var(--secondary-text)] pl-4 pr-12 py-3 rounded-[24px] shadow-md shadow-orange-200"
               }
+              disabled={responseTyping}
             />
             <button
               className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2 hover:bg-[#c28e54]"
