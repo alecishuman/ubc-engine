@@ -158,7 +158,7 @@ export default function ChatPage() {
         </div>
 
         <div className="fixed w-[inherit] flex justify-center bottom-[4vh] z-10">
-          <div className="w-[80%] max-w-[700px] flex flex-col relative justify-center items-center">
+          <div className="w-[90%] max-w-[770px] flex flex-col relative justify-center items-center">
             <textarea
               type="text"
               value={value}
