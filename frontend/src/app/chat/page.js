@@ -7,6 +7,7 @@ import SearchBar from "@/components/SearchBar";
 
 import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -14,6 +15,8 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [currentResponse, setCurrentResponse] = useState("");
   const [responseTyping, setResponseTyping] = useState(false);
+  const [typingInterval, setTypingInterval] = useState(null);
+  const [pause, setPause] = useState(false);
   const [links, setLinks] = useState([]);
   const [questions, setQuestions] = useState([]);
 
@@ -65,27 +68,36 @@ export default function ChatPage() {
     let i = 0;
     setResponseTyping(true);
     setCurrentResponse("");
-    const typingInterval = setInterval(() => {
-      setCurrentResponse(res.slice(0, i));
-      i += 3;
-      if (i >= res.length) {
-        setMessages((prev) => [...prev, res]);
-        setCurrentResponse("");
-        clearInterval(typingInterval);
-        setResponseTyping(false);
-      }
-    }, typingSpeed);
+    setTypingInterval(
+      setInterval(() => {
+        setCurrentResponse(res.slice(0, i));
+        i += 3;
+        if (i >= res.length) {
+          setMessages((prev) => [...prev, res]);
+          setCurrentResponse("");
+          clearInterval(typingInterval);
+          setResponseTyping(false);
+        }
+      }, typingSpeed)
+    );
+  };
+
+  const pauseResponse = () => {
+    setResponseTyping(false);
+    setMessages((prev) => [...prev, currentResponse]);
+    setCurrentResponse("");
+    setPause(false);
+    clearInterval(typingInterval);
   };
 
   // Messages
   const messageBottomRef = useRef(null);
   useEffect(() => {
-    if (messageBottomRef) {
-      messageBottomRef.current.lastElementChild?.scrollIntoView({
-        behavior: "smooth",
-      });
+    if (messageBottomRef.current) {
+      messageBottomRef.current.scrollTop =
+        messageBottomRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, currentResponse.length]);
 
   // Initial search
   const didSearch = useRef(false);
@@ -106,7 +118,7 @@ export default function ChatPage() {
 
         <div
           ref={messageBottomRef}
-          className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 pt-4 pb-6"
+          className="messages w-4/5 max-w-[700px] h-[85vh] flex flex-col gap-4 pt-4 pb-8"
         >
           {messages.map((message, index) =>
             index % 2 == 1 ? (
@@ -152,16 +164,25 @@ export default function ChatPage() {
               ref={textAreaRef}
               rows={1}
               className={
-                "search-bar w-full max-h-[50vh] border border-[var(--secondary-text)] pl-4 pr-12 py-3 rounded-[24px] shadow-md shadow-orange-200"
+                "search-bar w-full max-h-[50vh] border border-[var(--secondary-text)] pl-4 pr-12 py-3 rounded-[24px] shadow-md shadow-orange-200 disabled:bg-[var(--primary-bg)] disabled:cursor-not-allowed"
               }
               disabled={responseTyping}
             />
-            <button
-              className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2 hover:bg-[#c28e54]"
-              onClick={() => search(value)}
-            >
-              <RightArrow />
-            </button>
+            {responseTyping ? (
+              <button
+                className="text-[var(--secondary-text)] absolute right-2"
+                onClick={() => pauseResponse()}
+              >
+                <StopCircleIcon sx={{ fontSize: "36px" }} />
+              </button>
+            ) : (
+              <button
+                className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2 hover:bg-[#c28e54]"
+                onClick={() => search(value)}
+              >
+                <RightArrow />
+              </button>
+            )}
           </div>
         </div>
 

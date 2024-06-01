@@ -3,7 +3,7 @@
 }
 
 .messages {
-    overflow-y: scroll;
+    overflow-y: auto;
     /* Add the ability to scroll */
     -ms-overflow-style: none;
     /* IE and Edge */
