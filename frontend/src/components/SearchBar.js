@@ -31,7 +31,7 @@ export default function SearchBar() {
       />
       <Link
         className="bg-[var(--secondary-text)] text-white py-1 px-1 rounded-full absolute right-2"
-        href="/chat"
+        href={`/chat?search=${value}`}
       >
         <RightArrow />
       </Link>

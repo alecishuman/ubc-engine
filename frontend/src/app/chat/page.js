@@ -68,18 +68,21 @@ export default function ChatPage() {
     let i = 0;
     setResponseTyping(true);
     setCurrentResponse("");
-    setTypingInterval(
-      setInterval(() => {
-        setCurrentResponse(res.slice(0, i));
-        i += 3;
-        if (i >= res.length) {
-          setMessages((prev) => [...prev, res]);
-          setCurrentResponse("");
-          clearInterval(typingInterval);
-          setResponseTyping(false);
-        }
-      }, typingSpeed)
-    );
+    if (typingInterval) {
+      clearInterval(typingInterval);
+    }
+    const newTypingInterval = setInterval(() => {
+      setCurrentResponse(res.slice(0, i));
+      i += 3;
+      if (i >= res.length) {
+        setMessages((prev) => [...prev, res]);
+        setCurrentResponse("");
+        clearInterval(newTypingInterval);
+        setResponseTyping(false);
+        setTypingInterval(null);
+      }
+    }, typingSpeed);
+    setTypingInterval(newTypingInterval);
   };
 
   const pauseResponse = () => {
@@ -88,6 +91,7 @@ export default function ChatPage() {
     setCurrentResponse("");
     setPause(false);
     clearInterval(typingInterval);
+    setTypingInterval(null);
   };
 
   // Messages
