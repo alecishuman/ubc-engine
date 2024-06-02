@@ -8,6 +8,8 @@ import SearchBar from "@/components/SearchBar";
 import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import Login from "@/components/Login";
+import Signup from "@/components/Signup";
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -235,6 +237,10 @@ export default function ChatPage() {
               {index + 1}. {question}
             </button>
           ))}
+        </div>
+        <div className="w-full h-full flex flex-col lg:flex-row justify-end lg:items-end gap-3 bottom-[4vh]">
+          <Login />
+          <Signup />
         </div>
       </div>
     </div>
