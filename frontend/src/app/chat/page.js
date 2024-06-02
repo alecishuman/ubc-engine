@@ -8,6 +8,7 @@ import SearchBar from "@/components/SearchBar";
 import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import MenuIcon from "@mui/icons-material/Menu";
 import Login from "@/components/Login";
 import Signup from "@/components/Signup";
 
@@ -105,6 +106,12 @@ export default function ChatPage() {
     }
   }, [messages, currentResponse.length]);
 
+  // Hamburger menu
+  const [menuOpen, setMenuOpen] = useState(true);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   // Initial search
   const didSearch = useRef(false);
   useEffect(() => {
@@ -117,7 +124,17 @@ export default function ChatPage() {
 
   return (
     <div className="w-full h-[100vh] flex flex-row">
-      <div className="flex flex-col w-full md:w-[70%] justify-center items-center">
+      <button
+        className="fixed top-4 right-[max(1rem,2vw)] p-[3px] border-2 border-[var(--primary-text)] rounded-lg z-20"
+        onClick={toggleMenu}
+      >
+        <MenuIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
+      </button>
+      <div
+        className={"flex flex-col w-full justify-center items-center ".concat(
+          menuOpen && "md:w-[70%]"
+        )}
+      >
         <Link className="fixed top-[3vh]" href="/">
           <HomeIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
         </Link>
@@ -199,12 +216,16 @@ export default function ChatPage() {
               : "bottom-[4vh] opacity-0"
           )}
         >
-          <div className="w-[80%] max-w-[700px] flex justify-end gap-1 text-sm max-md:text-xs secondary-font pr-2">
+          <div className="w-[80%] max-w-[700px] flex justify-end gap-1 text-sm max-md:text-xs secondary-font">
             <div className="font-semibold">'Shift + Enter'</div> for new line
           </div>
         </div>
       </div>
-      <div className="w-[30%] h-full fixed right-0 flex flex-col gap-4 px-8 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] max-md:hidden">
+      <div
+        className={"h-full fixed right-0 flex flex-col gap-4 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all ".concat(
+          menuOpen ? "px-8 w-full md:w-[30%] z-10" : "w-0"
+        )}
+      >
         {links.length > 0 && (
           <div className="text-2xl font-semibold">Related Links</div>
         )}
