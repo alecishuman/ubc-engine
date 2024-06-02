@@ -22,6 +22,7 @@ export default function ChatPage() {
   const [pause, setPause] = useState(false);
   const [links, setLinks] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [firstLoading, setFirstLoading] = useState(true);
 
   // Search bar
   const textAreaRef = useRef(null);
@@ -107,12 +108,19 @@ export default function ChatPage() {
   }, [messages, currentResponse.length]);
 
   // Hamburger menu
-  const [menuOpen, setMenuOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [firstTimeToggle, setFirstTimeToggle] = useState(true);
   const toggleMenu = () => {
+    setFirstTimeToggle(false);
     setMenuOpen(!menuOpen);
   };
 
   // Initial search
+  useEffect(() => {
+    setTimeout(() => {
+      setFirstLoading(false);
+    }, 1000);
+  }, []);
   const didSearch = useRef(false);
   useEffect(() => {
     if (didSearch.current) return;
@@ -259,10 +267,12 @@ export default function ChatPage() {
             </button>
           ))}
         </div>
-        <div className="w-full h-full flex flex-col lg:flex-row justify-end lg:items-end gap-3 bottom-[4vh]">
-          <Login />
-          <Signup />
-        </div>
+        {!firstLoading && (
+          <div className="w-full h-full flex flex-col lg:flex-row justify-end lg:items-end gap-3 bottom-[4vh]">
+            <Login />
+            <Signup />
+          </div>
+        )}
       </div>
     </div>
   );
