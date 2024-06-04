@@ -110,9 +110,14 @@ export default function ChatPage() {
   // Hamburger menu
   const [menuOpen, setMenuOpen] = useState(false);
   const [firstTimeToggle, setFirstTimeToggle] = useState(true);
+  const [spinning, setSpinning] = useState(false);
   const toggleMenu = () => {
     setFirstTimeToggle(false);
     setMenuOpen(!menuOpen);
+    setSpinning(true);
+    setTimeout(() => {
+      setSpinning(false);
+    }, 500);
   };
 
   // Initial search
@@ -133,7 +138,9 @@ export default function ChatPage() {
   return (
     <div className="w-full h-[100vh] flex flex-row">
       <button
-        className="fixed top-4 right-[max(1rem,2vw)] p-[3px] border-2 border-[var(--primary-text)] rounded-lg z-20"
+        className={"fixed top-4 right-[max(1rem,2vw)] p-[3px] border-2 border-[var(--primary-text)] rounded-lg z-20 spinning-btn".concat(
+          spinning ? " spin" : ""
+        )}
         onClick={toggleMenu}
       >
         <MenuIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
@@ -230,7 +237,7 @@ export default function ChatPage() {
         </div>
       </div>
       <div
-        className={"h-full fixed right-0 flex flex-col gap-4 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all ".concat(
+        className={"h-full fixed right-0 flex flex-col gap-4 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all duration-300 ".concat(
           menuOpen ? "px-8 w-full md:w-[30%] z-10" : "w-0"
         )}
       >
