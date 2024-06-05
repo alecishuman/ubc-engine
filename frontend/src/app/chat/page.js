@@ -111,7 +111,15 @@ export default function ChatPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [firstTimeToggle, setFirstTimeToggle] = useState(true);
   const [spinning, setSpinning] = useState(false);
+  const menuRef = useRef(null);
   const toggleMenu = () => {
+    if (menuRef.current) {
+      if (menuOpen) {
+        menuRef.current.style.transform = `translateX(${menuRef.current.offsetWidth}px)`;
+      } else {
+        menuRef.current.style.transform = "translateX(0)";
+      }
+    }
     setFirstTimeToggle(false);
     setMenuOpen(!menuOpen);
     setSpinning(true);
@@ -124,7 +132,7 @@ export default function ChatPage() {
   useEffect(() => {
     setTimeout(() => {
       setFirstLoading(false);
-    }, 1000);
+    }, 200);
   }, []);
   const didSearch = useRef(false);
   useEffect(() => {
@@ -138,7 +146,7 @@ export default function ChatPage() {
   return (
     <div className="w-full h-[100vh] flex flex-row">
       <button
-        className={"fixed top-4 right-[max(1rem,2vw)] p-[3px] border-2 border-[var(--primary-text)] rounded-lg z-20 spinning-btn".concat(
+        className={"absolute top-4 right-[max(1rem,2vw)] p-[3px] border-2 border-[var(--primary-text)] rounded-lg z-20 spinning-btn".concat(
           spinning ? " spin" : ""
         )}
         onClick={toggleMenu}
@@ -191,7 +199,7 @@ export default function ChatPage() {
           )}
         </div>
 
-        <div className="fixed w-[inherit] flex justify-center bottom-[4vh] z-10">
+        <div className="absolute w-[inherit] flex justify-center bottom-[4vh] z-10">
           <div className="w-[90%] max-w-[770px] flex flex-col relative justify-center items-center">
             <textarea
               type="text"
@@ -237,9 +245,8 @@ export default function ChatPage() {
         </div>
       </div>
       <div
-        className={"h-full fixed right-0 flex flex-col gap-4 py-10 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all duration-300 ".concat(
-          menuOpen ? "px-8 w-full md:w-[30%] z-10" : "w-0"
-        )}
+        className={`w-full md:w-[30%] h-full absolute right-0 translate-x-[100vw] md:translate-x-[30vw] flex flex-col gap-4 py-10 px-8 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all duration-300  z-10`}
+        ref={menuRef}
       >
         {links.length > 0 && (
           <div className="text-2xl font-semibold">Related Links</div>
