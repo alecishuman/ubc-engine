@@ -24,6 +24,27 @@ export default function ChatPage() {
   const [questions, setQuestions] = useState([]);
   const [firstLoading, setFirstLoading] = useState(true);
 
+  // Hamburger menu
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [firstTimeToggle, setFirstTimeToggle] = useState(true);
+  const [spinning, setSpinning] = useState(false);
+  const menuRef = useRef(null);
+  const toggleMenu = () => {
+    if (menuRef.current) {
+      if (menuOpen) {
+        menuRef.current.style.transform = `translateX(${menuRef.current.offsetWidth}px)`;
+      } else {
+        menuRef.current.style.transform = "translateX(0)";
+      }
+    }
+    setFirstTimeToggle(false);
+    setMenuOpen(!menuOpen);
+    setSpinning(true);
+    setTimeout(() => {
+      setSpinning(false);
+    }, 500);
+  };
+
   // Search bar
   const textAreaRef = useRef(null);
   useEffect(() => {
@@ -84,6 +105,11 @@ export default function ChatPage() {
         clearInterval(newTypingInterval);
         setResponseTyping(false);
         setTypingInterval(null);
+        if (firstTimeToggle && window.innerWidth > 768) {
+          setTimeout(() => {
+            toggleMenu();
+          }, 300);
+        }
       }
     }, typingSpeed);
     setTypingInterval(newTypingInterval);
@@ -106,27 +132,6 @@ export default function ChatPage() {
         messageBottomRef.current.scrollHeight;
     }
   }, [messages, currentResponse.length]);
-
-  // Hamburger menu
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [firstTimeToggle, setFirstTimeToggle] = useState(true);
-  const [spinning, setSpinning] = useState(false);
-  const menuRef = useRef(null);
-  const toggleMenu = () => {
-    if (menuRef.current) {
-      if (menuOpen) {
-        menuRef.current.style.transform = `translateX(${menuRef.current.offsetWidth}px)`;
-      } else {
-        menuRef.current.style.transform = "translateX(0)";
-      }
-    }
-    setFirstTimeToggle(false);
-    setMenuOpen(!menuOpen);
-    setSpinning(true);
-    setTimeout(() => {
-      setSpinning(false);
-    }, 500);
-  };
 
   // Initial search
   useEffect(() => {
@@ -154,8 +159,8 @@ export default function ChatPage() {
         <MenuIcon sx={{ color: "var(--primary-text)", fontSize: 32 }} />
       </button>
       <div
-        className={"flex flex-col w-full justify-center items-center ".concat(
-          menuOpen && "md:w-[70%]"
+        className={"flex flex-col w-full justify-center items-center transition-all duration-300".concat(
+          menuOpen ? " md:w-[70%]" : ""
         )}
       >
         <Link className="fixed top-[3vh]" href="/">
