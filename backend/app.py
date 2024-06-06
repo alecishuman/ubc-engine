@@ -1,11 +1,13 @@
-from flask import Flask, request, jsonify, g
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from flask_pymongo import PyMongo
-
 import os
 from dotenv import load_dotenv, dotenv_values
 
 load_dotenv()
+
+# Load blueprints
+from user.routes import user_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -15,6 +17,10 @@ app.config["MONGO_URI"] = os.getenv("DB_URI")
 
 mongo = PyMongo(app)
 db = mongo.db
+
+
+app.register_blueprint(user_bp, url_prefix="/user")
+
 
 @app.route("/engine/<int:id>", methods=["GET"])
 def get_engine_response(id):
