@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from extensions.db import mongo
 
+
 class User:
 
     def signup(self):

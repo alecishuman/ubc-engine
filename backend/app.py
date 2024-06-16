@@ -18,7 +18,7 @@ def create_app():
     mongo.init_app(app)
 
     # Load blueprints
-    from user.routes import user_bp
+    from routes.user import user_bp
 
     app.register_blueprint(user_bp, url_prefix="/user")
 
