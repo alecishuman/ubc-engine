@@ -239,9 +239,7 @@ export default function ChatPage() {
 
         <div
           className={"enter-hint fixed w-[inherit] flex justify-center text-[var(--primary-text)] ".concat(
-            startedTyping
-              ? "bottom-[1.5vh] opacity-1"
-              : "bottom-[4vh] opacity-0"
+            startedTyping ? "bottom-[1vh] opacity-1" : "bottom-[4vh] opacity-0"
           )}
         >
           <div className="w-[80%] max-w-[700px] flex justify-end gap-1 text-sm max-md:text-xs secondary-font">

@@ -39,7 +39,9 @@ export default function SignupPage() {
         <Link href="/" className="absolute right-6 top-6">
           <HomeIcon sx={{ fontSize: 28, color: "var(--primary-text)" }} />
         </Link>
-        <div className="text-3xl font-semibold">sign up!</div>
+        <div className="text-3xl font-semibold text-[var(--primary-text)]">
+          sign up!
+        </div>
         <div className="w-full mt-2 font-semibold text-[var(--primary-text)]">
           first name:
         </div>
