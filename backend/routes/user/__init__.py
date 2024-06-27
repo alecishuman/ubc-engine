@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, request, jsonify
+from flask import Blueprint, Flask, request, jsonify, session
 from models.user import User
 
 
@@ -13,3 +13,9 @@ def login():
 @user_bp.route("/signup", methods=["POST"])
 def signup():
     return User().signup()
+
+
+@user_bp.route("/logout")
+def logout():
+    session.pop("email", None)
+    return jsonify({"message": "User logged out successfully"}), 200

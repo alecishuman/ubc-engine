@@ -2,30 +2,30 @@
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
-
+  const router = useRouter();
   const signup = (e) => {
     e.preventDefault();
-    const data = {
-      firstName: e.target[0].value,
-      lastName: e.target[1].value,
-      email: e.target[2].value,
-      password: e.target[3].value,
-    };
     fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        firstName: e.target[0].value,
+        lastName: e.target[1].value,
+        email: e.target[2].value,
+        password: e.target[3].value,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
           console.error(data.error);
         } else {
-          console.log(data);
+          router.push("/login");
         }
       });
   };

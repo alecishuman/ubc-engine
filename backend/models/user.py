@@ -1,18 +1,31 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 from extensions.db import mongo
-
+import bcrypt
 
 class User:
 
     def signup(self):
-        user = request.json
-        user["_id_"] = 1
-        mongo.db.users.insert_one(user)
-        return jsonify({"message": "User registered successfully"}), 201
+        users = mongo.db.users
+        req = request.json
+        signup_user = users.find_one({"email": req["email"]})
+        if signup_user:
+            return jsonify({"message": "User already exists"}), 409
+        hashed = bcrypt.hashpw(req["password"].encode("utf-8"), bcrypt.gensalt(14))
+        users.insert_one(
+            {
+                "firstName": req["firstName"],
+                "lastName": req["lastName"],
+                "password": hashed,
+                "email": req["email"],
+            }
+        )
+        return jsonify({"message": "User created successfully"}), 201
 
     def login(self):
-        user = request.json
-        user = mongo.db.users.find_one(user)
+        req = request.json
+        user = mongo.db.users.find_one({"email": req["email"]})
         if user:
-            return jsonify({"message": "User logged in successfully"}), 200
+            if bcrypt.checkpw(req["password"].encode("utf-8"), user["password"]):
+                session["email"] = req["email"]
+                return jsonify({"message": "User logged in successfully"}), 200
         return jsonify({"message": "Invalid credentials"}), 401
