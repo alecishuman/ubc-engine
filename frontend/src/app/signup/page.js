@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const router = useRouter();
+
+  const [warningText, setWarningText] = useState("");
   const signup = (e) => {
     e.preventDefault();
     fetch("http://localhost:8080/user/signup", {
@@ -24,8 +26,14 @@ export default function SignupPage() {
       .then((data) => {
         if (data.error) {
           console.error(data.error);
+          if (data.error === "User already exists") {
+            setWarningText("email already exists");
+          } else {
+            setWarningText("");
+          }
         } else {
           router.push("/login");
+          setWarningText("");
         }
       });
   };
@@ -69,11 +77,15 @@ export default function SignupPage() {
         <div className="w-full font-semibold mt-1 text-[var(--primary-text)]">
           password:
         </div>
+
         <input
           type="password"
           placeholder="password"
           className="border border-[var(--primary-text)] rounded-md px-4 py-2 w-full"
         ></input>
+        {warningText && (
+          <div className="text-red-500 text-sm">*{warningText}*</div>
+        )}
         <button
           className="bg-[var(--primary-text)] text-white px-4 py-2 rounded-md mt-4"
           type="submit"

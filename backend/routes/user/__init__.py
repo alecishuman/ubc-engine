@@ -17,5 +17,4 @@ def signup():
 
 @user_bp.route("/logout")
 def logout():
-    session.pop("email", None)
     return jsonify({"message": "User logged out successfully"}), 200
