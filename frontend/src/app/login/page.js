@@ -4,12 +4,17 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import HomeIcon from "@mui/icons-material/Home";
+import { CircularProgress } from "@mui/material";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [warningText, setWarningText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onLogin = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setWarningText("");
     fetch("http://localhost:8080/user/login", {
       method: "POST",
       headers: {
@@ -24,9 +29,13 @@ export default function LoginPage() {
       .then((data) => {
         if (data.error) {
           console.error(data.error);
+          if (data.error === "Invalid credentials") {
+            setWarningText("Invalid credentials");
+          }
         } else {
           router.push("/chat");
         }
+        setLoading(false);
       });
   };
 
@@ -58,6 +67,9 @@ export default function LoginPage() {
           placeholder="password"
           className="border border-[var(--secondary-text)] text-sm rounded-md px-4 py-2 w-full"
         ></input>
+        {warningText && (
+          <div className="text-red-500 text-sm">*{warningText}*</div>
+        )}
         <div className="w-full flex flex-start">
           <Link href="/password-reset" className="text-xs underline">
             forgot password?
@@ -65,9 +77,14 @@ export default function LoginPage() {
         </div>
         <button
           type="submit"
-          className="bg-[var(--secondary-text)] text-white px-4 py-2 rounded-md mt-4"
+          className="bg-[var(--secondary-text)] text-white w-20 h-10 rounded-md mt-4"
+          disabled={loading}
         >
-          login
+          {loading ? (
+            <CircularProgress size={20} sx={{ color: "white" }} />
+          ) : (
+            "login"
+          )}
         </button>
         <div className="text-sm">
           don't have an account?{" "}

@@ -3,13 +3,16 @@ import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
 
 export default function SignupPage() {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const [warningText, setWarningText] = useState("");
   const signup = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setWarningText("");
     fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: {
@@ -28,13 +31,11 @@ export default function SignupPage() {
           console.error(data.error);
           if (data.error === "User already exists") {
             setWarningText("email already exists");
-          } else {
-            setWarningText("");
           }
         } else {
           router.push("/login");
-          setWarningText("");
         }
+        setLoading(false);
       });
   };
 
@@ -87,10 +88,14 @@ export default function SignupPage() {
           <div className="text-red-500 text-sm">*{warningText}*</div>
         )}
         <button
-          className="bg-[var(--primary-text)] text-white px-4 py-2 rounded-md mt-4"
+          className="bg-[var(--primary-text)] text-white w-28 h-10 rounded-md mt-4"
           type="submit"
         >
-          sign up
+          {loading ? (
+            <CircularProgress size={20} sx={{ color: "white" }} />
+          ) : (
+            "sign up"
+          )}
         </button>
         <div className="text-sm">
           already have an account?{" "}
