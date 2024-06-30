@@ -1,9 +1,17 @@
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from flask_pymongo import PyMongo
-from extensions.db import mongo
+from extensions import mongo, jwt
 import os
 from dotenv import load_dotenv, dotenv_values
+from datetime import timedelta
+from flask_jwt_extended import (
+    jwt_required,
+    get_jwt,
+    get_jwt_identity,
+    unset_jwt_cookies,
+    current_user,
+)
 
 load_dotenv()
 
@@ -13,9 +21,12 @@ def create_app():
     CORS(app)
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["MONGO_URI"] = os.getenv("DB_URI")
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
-    # init db
+    # init app
     mongo.init_app(app)
+    jwt.init_app(app)
 
     # Load blueprints
     from routes.user import user_bp

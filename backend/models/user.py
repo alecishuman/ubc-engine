@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
 from extensions.db import mongo
 import bcrypt
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 class User:
 
@@ -24,7 +25,24 @@ class User:
     def login(self):
         req = request.json
         user = mongo.db.users.find_one({"email": req["email"]})
-        if user:
-            if bcrypt.checkpw(req["password"].encode("utf-8"), user["password"]):
-                return jsonify({"message": "User logged in successfully"}), 200
+        if user and bcrypt.checkpw(req["password"].encode("utf-8"), user["password"]):
+            access_token = create_access_token(identity=req["email"])
+            refresh_token = create_refresh_token(identity=req["email"])
+            return (
+                jsonify(
+                    {
+                        "tokens": {
+                            "access_token": access_token,
+                            "refresh_token": refresh_token,
+                        },
+                        "message": "User logged in successfully",
+                        "firstName": user["firstName"],
+                        "lastName": user["lastName"],
+                    }
+                ),
+                200,
+            )
         return jsonify({"error": "Invalid credentials"}), 401
+
+    def logout(self):
+        return jsonify({"message": "User logged out successfully"}), 200
