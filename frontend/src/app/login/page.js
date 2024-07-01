@@ -9,7 +9,13 @@ import { CircularProgress } from "@mui/material";
 export default function LoginPage() {
   const router = useRouter();
   const [warningText, setWarningText] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { user, login, signout, loading, setLoading } = useAuth();
+
+  if (user) {
+    router.push("/chat");
+  } else {
+    signout();
+  }
 
   const onLogin = (e) => {
     e.preventDefault();
