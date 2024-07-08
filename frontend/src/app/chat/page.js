@@ -186,7 +186,7 @@ export default function ChatPage() {
                 <div className="font-semibold text-[var(--primary-text)]">
                   You
                 </div>
-                <div className="bg-[var(--secondary-text)] rounded-lg p-4 max-w-[70%]">
+                <div className="bg-[var(--secondary-text)] rounded-lg px-4 py-3 max-w-[70%]">
                   {message}
                 </div>
               </div>

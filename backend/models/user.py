@@ -36,8 +36,13 @@ class User:
                             "refresh_token": refresh_token,
                         },
                         "message": "User logged in successfully",
+                        "firstName": user["firstName"],
+                        "lastName": user["lastName"],
                     }
                 ),
                 200,
             )
         return jsonify({"error": "Invalid credentials"}), 401
+
+    def logout(self):
+        return jsonify({"message": "User logged out successfully"}), 200

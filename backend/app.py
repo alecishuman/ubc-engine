@@ -10,6 +10,7 @@ from flask_jwt_extended import (
     get_jwt,
     get_jwt_identity,
     unset_jwt_cookies,
+    current_user,
 )
 
 load_dotenv()
@@ -31,11 +32,6 @@ def create_app():
     from routes.user import user_bp
 
     app.register_blueprint(user_bp, url_prefix="/user")
-
-    @app.route("/profile", methods=["GET"])
-    @jwt_required()
-    def get_profile():
-        return jsonify({"message": "Profile route"})
 
     @app.route("/engine/<int:id>", methods=["GET"])
     def get_engine_response(id):

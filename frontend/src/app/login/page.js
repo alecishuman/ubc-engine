@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth, AuthProvider } from "../../context/auth";
 
 import HomeIcon from "@mui/icons-material/Home";
 import { CircularProgress } from "@mui/material";
@@ -39,6 +40,11 @@ export default function LoginPage() {
             setWarningText("Invalid credentials");
           }
         } else {
+          login({
+            email: e.target[0].value,
+            firstName: data.firstName,
+            lastName: data.lastName,
+          });
           router.push("/chat");
         }
         setLoading(false);
