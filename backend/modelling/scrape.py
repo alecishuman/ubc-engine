@@ -15,19 +15,23 @@ def scrape(url):
             nav_links.add("https://www.cs.ubc.ca" + nav_link["href"])
 
     documents = []
-    for link in nav_links:
-        documents.append(scrape_page(link))
+    for i, link in enumerate(nav_links):
+        try:
+            documents.append(scrape_page(link))
+        except:
+            print(f"Error scraping {link}")
+        # if i % 50 == 0:
+        if i == 20:
+            print(f"Scraped {i} pages")
+            break
 
 
 def scrape_page(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
-
     main_content = soup.find("main", {"id": "main-content"})
-    title = (
-        main_content.find(class_="page-title")
-        .get_text()
-        .replace("\n", " ")
-        .replace("\r", "")
-    )
+    title = " ".join(main_content.find(class_="page-title").get_text().split())
+    main_content.find("nav").decompose()
+    content = main_content.get_text().replace(title, "", 1)
+    content = " ".join(content.split())
     print(title)
