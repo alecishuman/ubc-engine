@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import nltk
 
 page_url = "https://www.cs.ubc.ca/"
 
@@ -34,4 +35,16 @@ def scrape_page(url):
     main_content.find("nav").decompose()
     content = main_content.get_text().replace(title, "", 1)
     content = " ".join(content.split())
-    print(title)
+    return {page_url: url, "title": title, "content": content}
+
+
+def chunk_text(text, max_chunk_size=200):
+    chunks = []
+    sent = nltk.sent_tokenize(text)
+    for s in sent:
+        if len(s) > max_chunk_size:
+            chunks.extend(s.split(max_chunk_size))
+        else:
+            chunks.append(s)
+    chunks.append(text)
+    return chunks
