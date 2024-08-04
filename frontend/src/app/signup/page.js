@@ -3,12 +3,20 @@ import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth, AuthProvider } from "../../context/auth.js";
 import { CircularProgress } from "@mui/material";
 
 export default function SignupPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { user, login, signout, loading, setLoading } = useAuth();
   const [warningText, setWarningText] = useState("");
+
+  if (user) {
+    router.push("/chat");
+  } else {
+    signout();
+  }
+
   const signup = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -33,7 +41,12 @@ export default function SignupPage() {
             setWarningText("email already exists");
           }
         } else {
-          router.push("/login");
+          login({
+            email: e.target[2].value,
+            firstName: e.target[0].value,
+            lastName: e.target[1].value,
+          });
+          router.push("/chat");
         }
         setLoading(false);
       });
