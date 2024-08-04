@@ -26,6 +26,15 @@ def scrape(url):
             print(f"Scraped {i} pages")
             break
 
+    chunked_docs = []
+    for doc in documents:
+        chunk_data = [
+            {page_url: doc[page_url], "title": doc["title"], "content": c}
+            for c in chunk_text(doc)
+        ]
+        chunked_docs.extend(chunk_data)
+    return chunked_docs
+
 
 def scrape_page(url):
     page = requests.get(url)
@@ -38,13 +47,12 @@ def scrape_page(url):
     return {page_url: url, "title": title, "content": content}
 
 
-def chunk_text(text, max_chunk_size=200):
+def chunk_text(doc, max_chunk_size=200):
     chunks = []
-    sent = nltk.sent_tokenize(text)
+    sent = nltk.sent_tokenize(doc["content"])
     for s in sent:
         if len(s) > max_chunk_size:
             chunks.extend(s.split(max_chunk_size))
         else:
             chunks.append(s)
-    chunks.append(text)
     return chunks
