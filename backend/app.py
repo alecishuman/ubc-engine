@@ -30,8 +30,10 @@ def create_app():
 
     # Load blueprints
     from routes.user import user_bp
+    from routes.engine import engine_bp
 
     app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(engine_bp, url_prefix="/engine")
 
     @app.route("/engine/<int:id>", methods=["GET"])
     def get_engine_response(id):

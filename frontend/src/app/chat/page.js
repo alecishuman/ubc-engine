@@ -2,8 +2,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
+import { useAuth } from "@/context/auth";
+import router, { useRouter } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
+import ChatSidebar from "@/components/ChatSidebar";
 
 import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
@@ -11,8 +13,11 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import Login from "@/components/Login";
 import Signup from "@/components/Signup";
+import { Chat } from "@mui/icons-material";
 
 export default function ChatPage() {
+  const { user, signout } = useAuth();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState([]);
@@ -89,7 +94,7 @@ export default function ChatPage() {
   };
 
   const typingResponse = (res) => {
-    const typingSpeed = 30;
+    const typingSpeed = 20;
     let i = 0;
     setResponseTyping(true);
     setCurrentResponse("");
@@ -247,50 +252,13 @@ export default function ChatPage() {
           </div>
         </div>
       </div>
-      <div
-        className={`w-full md:w-[30%] h-full absolute right-0 translate-x-[100vw] md:translate-x-[30vw] flex flex-col gap-4 py-10 px-8 bg-[var(--secondary-bg)] text-[var(--primary-text)] transition-all duration-300  z-10`}
-        ref={menuRef}
-      >
-        {links.length > 0 && (
-          <div className="text-2xl font-semibold">Related Links</div>
-        )}
-        <div className="flex flex-col gap-2 w-full">
-          {links.map((link, index) => (
-            <div className="w-full">
-              <div className="font-medium">
-                {index + 1}. {link.name}:
-              </div>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className="underline text-sm text-blue-500 hover:text-[var(--primary-text)]"
-              >
-                {link.url}
-              </a>
-            </div>
-          ))}
-        </div>
-        {questions.length > 0 && (
-          <div className="text-2xl font-semibold mt-4">Related Searches</div>
-        )}
-        <div className="flex flex-col gap-4 w-full">
-          {questions.map((question, index) => (
-            <button
-              className="w-full border border-[var(--primary-text)] bg-[var(--primary-bg)] px-3 py-4 rounded-lg text-start"
-              onClick={() => search(question)}
-            >
-              {index + 1}. {question}
-            </button>
-          ))}
-        </div>
-        {!firstLoading && (
-          <div className="w-full h-full flex flex-col lg:flex-row justify-end lg:items-end gap-3 bottom-[4vh]">
-            <Login />
-            <Signup />
-          </div>
-        )}
-      </div>
+      <ChatSidebar
+        menuRef={menuRef}
+        links={links}
+        questions={questions}
+        search={search}
+        firstLoading={firstLoading}
+      />
     </div>
   );
 }
