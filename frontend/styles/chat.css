@@ -28,3 +28,14 @@
         transform: rotate(360deg);
     }
 }
+
+.swipe-right {
+    animation: swipe-right 0.8s ease-out;
+}
+
+
+@keyframes swipe-right {
+    100% {
+        transform: translateX(300%);
+    }
+}

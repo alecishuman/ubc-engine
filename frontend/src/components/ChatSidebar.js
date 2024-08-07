@@ -6,6 +6,7 @@ import Login from "@/components/Login";
 import Signup from "@/components/Signup";
 
 import RightArrow from "@mui/icons-material/ArrowForward";
+import LeftArrow from "@mui/icons-material/ArrowBack";
 
 export default function ChatSidebar({
   menuRef,
@@ -32,17 +33,26 @@ export default function ChatSidebar({
           setHistory(data.history);
         });
     }
-  }, []);
+  }, [user]);
 
   const [historyBar, setHistoryBar] = useState(false);
+  const [animateSidebar, setAnimateSidebar] = useState(false);
   const changeSidebar = () => {
-    setHistoryBar(!historyBar);
+    setAnimateSidebar(true);
+    setTimeout(() => {
+      setAnimateSidebar(false);
+      setHistoryBar(!historyBar);
+    }, 200);
   };
 
   const HistoryBar = () => {
     return (
-      <>
-        <div className="text-2xl font-semibold">Recent Searches</div>
+      <div
+        className={"bg-[var(--secondary-bg)] ".concat(
+          animateSidebar ? "swipe-right" : ""
+        )}
+      >
+        <div className="text-2xl font-semibold mb-2">Recent Searches</div>
         {user ? (
           <div className="flex flex-col gap-4 w-full">
             {history.map((item) => (
@@ -56,15 +66,19 @@ export default function ChatSidebar({
             Please login to view history
           </div>
         )}
-      </>
+      </div>
     );
   };
 
   const MainSidebar = () => {
     return (
-      <>
+      <div
+        className={"bg-[var(--secondary-bg)] ".concat(
+          animateSidebar ? "swipe-right" : ""
+        )}
+      >
         {links.length > 0 && (
-          <div className="text-2xl font-semibold">Related Links</div>
+          <div className="text-2xl font-semibold mb-2">Related Links</div>
         )}
         <div className="flex flex-col gap-2 w-full">
           {links.map((link, index) => (
@@ -96,7 +110,7 @@ export default function ChatSidebar({
             </button>
           ))}
         </div>
-      </>
+      </div>
     );
   };
 
@@ -110,7 +124,16 @@ export default function ChatSidebar({
           className="relative top-[-0.8rem] left-[max(-0.4rem,-0.8vw)] font-semibold text-left flex items-center underline"
           onClick={changeSidebar}
         >
-          History <RightArrow sx={{ fontSize: "14px", marginLeft: "4px" }} />
+          {historyBar ? (
+            <>
+              Back <LeftArrow sx={{ fontSize: "14px", marginLeft: "4px" }} />
+            </>
+          ) : (
+            <>
+              History{" "}
+              <RightArrow sx={{ fontSize: "14px", marginLeft: "4px" }} />
+            </>
+          )}
         </button>
       )}
       {historyBar ? <HistoryBar /> : <MainSidebar />}

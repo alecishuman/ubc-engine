@@ -2,22 +2,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useAuth } from "@/context/auth";
-import router, { useRouter } from "next/navigation";
-import SearchBar from "@/components/SearchBar";
+import { useRouter } from "next/navigation";
 import ChatSidebar from "@/components/ChatSidebar";
 
 import HomeIcon from "@mui/icons-material/Home";
 import RightArrow from "@mui/icons-material/ArrowForward";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import MenuIcon from "@mui/icons-material/Menu";
-import Login from "@/components/Login";
-import Signup from "@/components/Signup";
-import { Chat } from "@mui/icons-material";
 
 export default function ChatPage() {
-  const { user, signout } = useAuth();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState([]);
