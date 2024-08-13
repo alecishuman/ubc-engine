@@ -5,9 +5,14 @@ import React, { useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import Login from "@/components/Login";
 import Signup from "@/components/Signup";
+import Signout from "@/components/Signout";
+import { useAuth } from "@/context/auth";
 
 export default function Home() {
   // On load animations
+
+  // Users
+  const { user, signout } = useAuth();
 
   // typing text
   const engine = "engine";
@@ -57,17 +62,21 @@ export default function Home() {
         </div>
       </div>
       <SearchBar />
-      <div className="mt-10 text-sm mb-1">
-        have an account already? or{" "}
-        <Link href="/signup" className="underline">
-          sign up
-        </Link>
-      </div>
-      <Login />
-      {/* <div className="flex flex-row gap-8 mt-12">
-        <Login />
-        <Signup />
-      </div> */}
+      {user ? (
+        <div className="mt-6">
+          <Signout />{" "}
+        </div>
+      ) : (
+        <>
+          <div className="mt-10 text-sm mb-1">
+            have an account already? or{" "}
+            <Link href="/signup" className="underline">
+              sign up
+            </Link>
+          </div>
+          <Login />
+        </>
+      )}
     </div>
   );
 }

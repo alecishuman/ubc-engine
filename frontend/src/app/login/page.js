@@ -12,6 +12,10 @@ export default function LoginPage() {
   const [warningText, setWarningText] = useState("");
   const { user, login, signout, loading, setLoading } = useAuth();
 
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
   if (user) {
     router.push("/chat");
   } else {
@@ -47,8 +51,11 @@ export default function LoginPage() {
           });
           router.push("/chat");
         }
-        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
       });
+    setLoading(false);
   };
 
   return (

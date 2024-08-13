@@ -7,6 +7,7 @@ import Signup from "@/components/Signup";
 
 import RightArrow from "@mui/icons-material/ArrowForward";
 import LeftArrow from "@mui/icons-material/ArrowBack";
+import Signout from "./Signout";
 
 export default function ChatSidebar({
   menuRef,
@@ -141,15 +142,7 @@ export default function ChatSidebar({
       {!firstLoading && (
         <div className="w-full h-full flex flex-col lg:flex-row justify-end lg:items-end gap-3 bottom-[3vh] ">
           {user ? (
-            <button
-              onClick={() => {
-                signout();
-                router.push("/");
-              }}
-              className="bg-[var(--primary-text)] px-5 py-3 rounded-lg text-white text-center font-semibold"
-            >
-              sign out
-            </button>
+            <Signout />
           ) : (
             <>
               <Login />
